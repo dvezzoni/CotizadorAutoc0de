@@ -1,0 +1,158 @@
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!-- General Information of the Framework -->
+    <name>Autoc0de Playwrigth - Automation Framework</name>
+    <description>Web application playwrigth automation framework</description>
+    <inceptionYear>2023</inceptionYear>
+
+    <!-- Developers of the automation project -->
+    <!-- Replace with your own data           -->
+
+    <developers>
+        <developer>
+            <id>jvitelli</id>
+            <name>Joel Vitelli</name>
+            <email>jvitelli92@gmail.com</email>
+            <timezone>Latam/Argentina</timezone>
+        </developer>
+    </developers>
+
+    <groupId>com.autoc0de.automation</groupId>
+    <artifactId>automation.AUTOC0DE</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <!--suppress UnresolvedMavenProperty -->
+        <tagExecution>@ExampleTag</tagExecution>
+        <navigateUrl>https://cotizadores.integrityseguros.com.ar/auto/?promo=AUTO18</navigateUrl>
+    </properties>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.microsoft.playwright/playwright -->
+	    <dependency>
+	      <groupId>com.microsoft.playwright</groupId>
+	      <artifactId>playwright</artifactId>
+	      <version>1.42.0</version>
+	    </dependency>
+        <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>7.16.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>7.16.1</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-core -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-core</artifactId>
+            <version>7.16.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-reload4j</artifactId>
+            <version>2.0.12</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.12</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.32</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/tech.grasshopper/extentreports-cucumber7-adapter -->
+        <dependency>
+            <groupId>tech.grasshopper</groupId>
+            <artifactId>extentreports-cucumber7-adapter</artifactId>
+            <version>1.14.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.25.3</version>
+        </dependency>
+        <!--  https://mvnrepository.com/artifact/junit/junit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <profiles>
+        <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <id>Local</id>
+            <properties>
+                <mode>Local</mode>
+            </properties>
+        </profile>
+        <profile>
+            <id>Grid</id>
+            <properties>
+                <mode>Grid</mode>
+            </properties>
+        </profile>
+    </profiles>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+                <executions>
+                    <execution>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>**/*Runner*.class</include>
+                    </includes>
+                    <argLine>
+                        -Dcucumber.filter.tags="${tagExecution}"
+                    </argLine>
+                    <systemPropertyVariables>
+                        <!--suppress UnresolvedMavenProperty -->
+                        <executionMode>${mode}</executionMode>
+                        <browser>Chromium</browser>
+                        <applicationUrl>${navigateUrl}</applicationUrl>
+                        <remoteUrl/>
+                    </systemPropertyVariables>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <argLine>--add-opens java.base/java.lang=ALL-UNNAMED</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
